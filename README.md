@@ -49,7 +49,7 @@ The proposed **Shape and Texture-Aware Building Simplification (STABS)** method 
 
 ## 🧩 Repository Contents
 
-'''bash
+```bash
 ├── data/ # Sample dataset and building labels
 ├── textures/ # Building texture library
 ├── src/ # Source code for STABS implementation
@@ -59,7 +59,7 @@ The proposed **Shape and Texture-Aware Building Simplification (STABS)** method 
 │ └── hue_adjustment/ # Hue correction and compositing
 ├── results/ # Experimental outputs and comparisons
 └── README.md # Project documentation
-'''
+```
 
 ---
 
