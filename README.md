@@ -1,79 +1,41 @@
-# 🏙️ A Raster-Based Method for Building Simplification and Texturing
+# A Raster-Based Method for Building Simplification and Texturing
 
-> **A novel raster-based approach for building simplification and texture preservation in remote sensing imagery, integrating superpixel segmentation, texture matching, and hue adjustment.**
+Code and output data for the paper "A raster-based method for building simplification considering shape and texture features based on remote sensing images."
 
-**Authors:** Ruijie Fan, Yilang Shen  
-**Affiliation:** School of Geospatial Engineering and Science, Sun Yat-sen University  
-**Published in:** *Geo-spatial Information Science* (2025)  
-**DOI:** [10.1080/10095020.2025.2573369](https://doi.org/10.1080/10095020.2025.2573369)
+Ruijie Fan and Yilang Shen, *Geo-spatial Information Science* (2025). [Paper](https://doi.org/10.1080/10095020.2025.2573369)
 
----
+![Building preprocessing and superpixel segmentation workflow](assets/method_overview.jpg)
 
-## 🌍 Overview
+## Method
 
-This repository provides the implementation and experimental data of the paper  
-**“A raster-based method for building simplification considering shape and texture features based on remote sensing images.”**
+The method works directly with raster building masks. It separates connected buildings, classifies each footprint as orthogonal or non-orthogonal from its corner distribution, estimates the main direction, and applies SEEDS superpixel segmentation. Superpixels are retained according to the proportion of building pixels they contain. The simplified footprint is then rotated back to its original orientation and placed in the source image.
 
-The proposed **Shape and Texture-Aware Building Simplification (STABS)** method introduces a raster-based approach for simplifying buildings while preserving visual continuity in remote sensing imagery. Unlike traditional vector-based or textureless raster simplification methods, STABS simultaneously considers both **shape** and **texture** information to maintain the perceptual consistency of buildings across multiple scales.
+The paper also describes texture selection and color adjustment for rendering the simplified buildings in remote sensing imagery.
 
----
+## Repository contents
 
-## 🚀 Key Contributions
+- `main.py`: batch-processing entry point.
+- `Preprocessor.py`: connected-component extraction and per-building mask preparation.
+- `Simplifier.py`: orientation estimation, SEEDS segmentation, and footprint simplification.
+- `Reset.py`: restores simplified footprints to their original position and records comparison metrics.
+- `texturePainted.py`: texture application used during reconstruction.
+- `Outputs/`: precomputed TIFF outputs.
 
-- **Texture-aware building simplification:**  
-  Introduces a method that assigns suitable textures from a pre-built texture library by comparing the **GLCM** and **LBP** feature similarities between the original building and library textures.
+## Environment
 
-- **Hue-adjusted texture matching:**  
-  Applies hue correction to matched textures to ensure color consistency between simplified and original buildings, enhancing **cartographic continuity**.
+The scripts use Python with NumPy, OpenCV (including `opencv-contrib-python` for `ximgproc`), pandas, and Rich.
 
-- **Superpixel-based segmentation:**  
-  Employs the **SEEDS** algorithm for superpixel segmentation, followed by evaluation using **corner ratio (CR)** and **square ratio (SR)** to retain geometrically meaningful building parts.
+This repository is a research snapshot rather than a packaged command-line application. Before running `main.py`, update the input, output, base-image, and texture-library paths for your local data. The current entry point also references experiment modules and assets from the original project environment that are not included here.
 
-- **Improved raster map generalization:**  
-  The method provides visually stable and structurally faithful simplification results that integrate smoothly back into remote sensing imagery.
+## Citation
 
----
-
-## 📊 Experimental Data
-
-- **Dataset:**  
-  Building imagery from the [Wuhan University Building Dataset](http://gpcv.whu.edu.cn/data/building_dataset.html), based on aerial data from Land Information New Zealand (LINZ).
-
-- **Texture Library:**  
-  Constructed from **50 building textures** collected via [Maps of Switzerland](https://map.geo.admin.ch/), processed with the *Image Quilting for Texture Synthesis* method.
-
-- **Evaluation Metrics:**  
-  Quantitative comparison using **MSE**, **PSNR**, **MS-SSIM**, **Gradient Similarity (GS)**, and **Edge Preservation Index (EPI)** demonstrates that STABS achieves higher similarity to the original imagery than Gaussian filtering and traditional methods.
-
----
-
-## 🧩 Repository Contents
-
-```bash
-├── data/ # Sample dataset and building labels
-├── textures/ # Building texture library
-├── src/ # Source code for STABS implementation
-│ ├── segmentation/ # Superpixel extraction (SEEDS)
-│ ├── simplification/ # CR/SR-based building simplification
-│ ├── texture_matching/ # GLCM + LBP texture comparison
-│ └── hue_adjustment/ # Hue correction and compositing
-├── results/ # Experimental outputs and comparisons
-└── README.md # Project documentation
+```bibtex
+@article{fan2025raster,
+  title   = {A Raster-Based Method for Building Simplification Considering Shape and Texture Features Based on Remote Sensing Images},
+  author  = {Fan, Ruijie and Shen, Yilang},
+  journal = {Geo-spatial Information Science},
+  year    = {2025},
+  pages   = {1--21},
+  doi     = {10.1080/10095020.2025.2573369}
+}
 ```
-
----
-
-## 🧠 Citation
-
-If you use this work, please cite:
-
-> **Fan, R., & Shen, Y.** (2025). *A raster-based method for building simplification considering shape and texture features based on remote sensing images.*  
-> *Geo-spatial Information Science.* DOI: [10.1080/10095020.2025.2573369](https://doi.org/10.1080/10095020.2025.2573369)
-
----
-
-## 🔮 Future Work
-
-- Incorporate **generative models (e.g., GANs)** to fill in missing textures and improve realism.  
-- Extend to **3D-aware simplification**, integrating structural line extraction and rooftop geometry.  
-- Explore **deep learning-based end-to-end map generalization** to automatically learn simplification strategies.
